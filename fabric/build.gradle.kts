@@ -106,7 +106,7 @@ tasks {
             "description" to rootProject.properties["description"],
             "fabricApiVersion" to libs.versions.fabricApi.get(),
             "fabricLoaderVersion" to libs.versions.fabricLoader.get(),
-            "minecraftVersion" to libs.versions.minecraft.get(),
+            "minecraftVersion" to "26.4-", // Fabric names snapshots 26.4-alpha.N; "~26.4-" = any 26.4 snapshot or release
             "website" to rootProject.properties["website"],
             "sources" to rootProject.properties["sources"],
             "issues" to rootProject.properties["issues"]
