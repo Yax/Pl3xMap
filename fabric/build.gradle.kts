@@ -44,9 +44,6 @@ dependencies {
     implementation(libs.fabric.loader)
     implementation(libs.fabric.api)
 
-    implementation(libs.cloudFabric)
-    include(libs.cloudFabric)
-
     implementation(libs.adventurePlatformFabric) {
         exclude("net.kyori", "ansi") // TODO: temporary
     }

@@ -23,7 +23,6 @@ adventureFabric="7.2.0" # https://github.com/KyoriPowered/adventure-platform-fab
 
 cloud="2.1.0" # https://github.com/incendo/cloud
 cloud-minecraft="2.0.1" # https://github.com/Incendo/cloud-minecraft
-cloud-minecraft-modded="2.1.0" # https://github.com/Incendo/cloud-minecraft-modded
 cloud-processors="1.0.0-rc.1" # https://github.com/Incendo/cloud-processors
 
 caffeine="3.3.0" # https://github.com/ben-manes/caffeine
@@ -65,7 +64,6 @@ cloudCore = { group = "org.incendo", name = "cloud-core", version.ref = "cloud" 
 cloudBrigadier = { group = "org.incendo", name = "cloud-brigadier", version.ref = "cloud-minecraft" }
 cloudPaper = { group = "org.incendo", name = "cloud-paper", version.ref = "cloud-minecraft" }
 cloudMinecraftExtras = { group = "org.incendo", name = "cloud-minecraft-extras", version.ref = "cloud-minecraft" }
-cloudFabric = { group = "org.incendo", name = "cloud-fabric", version.ref = "cloud-minecraft-modded" }
 cloudProcessorsConfirmation = { group = "org.incendo", name = "cloud-processors-confirmation", version.ref = "cloud-processors" }
 
 adventureApi = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }

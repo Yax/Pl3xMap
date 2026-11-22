@@ -23,35 +23,19 @@
  */
 package net.pl3x.map.fabric.server.command;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
-import io.leangen.geantyref.TypeToken;
-import net.minecraft.commands.arguments.DimensionArgument;
 import net.pl3x.map.core.command.CommandHandler;
 import net.pl3x.map.core.command.Sender;
 import net.pl3x.map.core.command.parser.PlatformParsers;
-import net.pl3x.map.core.command.parser.WorldParser;
 import org.incendo.cloud.Command;
-import org.incendo.cloud.SenderMapper;
-import org.incendo.cloud.brigadier.CloudBrigadierManager;
-import org.incendo.cloud.execution.ExecutionCoordinator;
-import org.incendo.cloud.fabric.FabricServerCommandManager;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public class FabricCommandManager implements CommandHandler {
-    private final FabricServerCommandManager<Sender> manager;
+    private final FabricServerCommandManager manager;
     private final Command.Builder<Sender> root;
 
     public FabricCommandManager() {
-        this.manager = new FabricServerCommandManager<Sender>(
-                ExecutionCoordinator.simpleCoordinator(),
-                SenderMapper.create(FabricSender::create, Sender::getSender)
-        );
-
-        CloudBrigadierManager<Sender, ?> brigadier = getManager().brigadierManager();
-        brigadier.setNativeNumberSuggestions(false);
-        brigadier.registerMapping(new TypeToken<WorldParser<Sender>>() {
-        }, builder -> builder.cloudSuggestions().toConstant(DimensionArgument.dimension()));
+        this.manager = new FabricServerCommandManager();
 
         setupExceptionHandlers();
 
@@ -61,7 +45,7 @@ public class FabricCommandManager implements CommandHandler {
     }
 
     @Override
-    public FabricServerCommandManager<Sender> getManager() {
+    public FabricServerCommandManager getManager() {
         return this.manager;
     }
 
