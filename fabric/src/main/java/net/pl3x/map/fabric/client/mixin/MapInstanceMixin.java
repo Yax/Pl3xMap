@@ -25,9 +25,9 @@ package net.pl3x.map.fabric.client.mixin;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.renderpearl.api.textures.GpuTexture;
 import java.awt.image.BufferedImage;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.MapTextureManager;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
@@ -49,7 +49,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MapInstanceMixin implements MapInstance {
     @Final
     @Shadow
-    DynamicTexture texture;
+    GpuTexture texture;
     @Shadow
     MapItemSavedData data;
     @Shadow
@@ -180,12 +180,22 @@ public abstract class MapInstanceMixin implements MapInstance {
 
     @Unique
     private boolean updateMapTexture() {
-        NativeImage pixels = this.texture.getPixels();
-        if (pixels == null) {
-            // vanilla texture not ready, or already discarded; ignore
-            return false;
+        if (!this.requiresUpload) {
+            // nothing changed since the last upload
+            return true;
         }
 
+        try (NativeImage pixels = new NativeImage(128, 128, false)) {
+            drawPixels(pixels);
+            pixels.writeToGpuTexture(RenderSystem.getDevice().createCommandEncoder(), this.texture);
+        }
+
+        this.requiresUpload = false;
+        return true;
+    }
+
+    @Unique
+    private void drawPixels(NativeImage pixels) {
         int color;
         int pl3xColor;
 
@@ -212,9 +222,5 @@ public abstract class MapInstanceMixin implements MapInstance {
                 }
             }
         }
-
-        // finalize the texture
-        this.texture.upload();
-        return true;
     }
 }
