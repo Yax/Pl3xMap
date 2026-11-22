@@ -44,7 +44,7 @@ public class Chunk_1_18 extends Chunk {
     public Chunk_1_18(World world, Region region, Data data, int index) {
         super(world, region, data, index);
 
-        this.full = data.status.endsWith("full"); // 1.20 uses minecraft namespace here
+        this.full = data.getStatus().endsWith("full"); // 1.20 uses minecraft namespace here
         if (!this.full) {
             return;
         }
@@ -218,8 +218,13 @@ public class Chunk_1_18 extends Chunk {
     @SuppressWarnings("FieldMayBeFinal")
     public static class Data extends Chunk.Data {
 
+        // up to 26.3
         @NBTName("Status")
-        private String status = "minecraft:empty";
+        private String legacyStatus = "minecraft:empty";
+
+        // 26.4-snapshot-1 (data version 5119) and newer
+        @NBTName("status")
+        private @Nullable String status = null;
 
         @NBTName("InhabitedTime")
         private long inhabitedTime = 0;
@@ -228,6 +233,10 @@ public class Chunk_1_18 extends Chunk {
         private HeightmapsData heightmaps = new HeightmapsData();
 
         private SectionData @Nullable [] sections = null;
+
+        public String getStatus() {
+            return this.status != null ? this.status : this.legacyStatus;
+        }
 
     }
 
