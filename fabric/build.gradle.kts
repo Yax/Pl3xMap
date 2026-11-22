@@ -43,13 +43,6 @@ dependencies {
 
     implementation(libs.fabric.loader)
     implementation(libs.fabric.api)
-
-    implementation(libs.adventurePlatformFabric) {
-        exclude("net.kyori", "ansi") // TODO: temporary
-    }
-    include(libs.adventurePlatformFabric) {
-        exclude("net.kyori", "ansi") // TODO: temporary
-    }
 }
 
 // https://github.com/BlueMap-Minecraft/BlueMap/blob/master/implementations/fabric/build.gradle.kts#L95-L109

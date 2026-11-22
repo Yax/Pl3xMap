@@ -26,12 +26,12 @@ package net.pl3x.map.fabric.server.command;
 import java.util.Objects;
 import java.util.UUID;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.command.Sender;
 import net.pl3x.map.core.world.World;
+import net.pl3x.map.fabric.server.FabricAudiences;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -56,7 +56,7 @@ public class FabricSender extends Sender {
 
     @Override
     public Audience audience() {
-        return ((MinecraftServerAudiences) Pl3xMap.api().adventure()).audience(getSender());
+        return ((FabricAudiences) Pl3xMap.api().adventure()).audience(getSender());
     }
 
     @Override

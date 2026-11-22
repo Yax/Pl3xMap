@@ -42,7 +42,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.kyori.adventure.platform.AudienceProvider;
-import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -80,7 +79,7 @@ public class Pl3xMapFabricServer extends Pl3xMap implements DedicatedServerModIn
 
     private MinecraftServer server;
     private ModContainer modContainer;
-    private MinecraftServerAudiences adventure;
+    private @Nullable FabricAudiences adventure;
     private Map<Biome, List<Feature>> biomeFeatureCache = new LinkedHashMap<>();
     ArrayList<ResourceKey<Feature>> canSpawnFromBonemealList = new ArrayList<>(10);
 
@@ -145,7 +144,7 @@ public class Pl3xMapFabricServer extends Pl3xMap implements DedicatedServerModIn
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             this.server = server;
-            this.adventure = MinecraftServerAudiences.of(this.server);
+            this.adventure = new FabricAudiences(this.server);
 
             enable();
 

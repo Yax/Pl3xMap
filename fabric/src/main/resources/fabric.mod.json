@@ -36,8 +36,7 @@
     "fabricloader": ">=${fabricLoaderVersion}",
     "fabric-api": ">=${fabricApiVersion}",
     "minecraft": "~${minecraftVersion}",
-    "java": ">=25",
-    "adventure-platform-fabric": "*"
+    "java": ">=25"
   },
   "recommends": {
     "better-fabric-console": "*"
