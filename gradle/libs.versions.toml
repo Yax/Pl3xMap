@@ -68,6 +68,7 @@ cloudProcessorsConfirmation = { group = "org.incendo", name = "cloud-processors-
 adventureApi = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
 adventureTextMinimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
 adventureTextSerializerPlain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
+adventureTextSerializerGson = { group = "net.kyori", name = "adventure-text-serializer-gson", version.ref = "adventure" }
 
 adventurePlatformFacet = { group = "com.github.OvercastCommunity.adventure-platform", name = "adventure-platform-facet", version.ref = "adventureBukkit" }
 adventurePlatformBukkit = { group = "com.github.OvercastCommunity.adventure-platform", name = "adventure-platform-bukkit", version.ref = "adventureBukkit" }

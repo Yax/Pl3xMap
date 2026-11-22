@@ -43,6 +43,12 @@ dependencies {
 
     implementation(libs.fabric.loader)
     implementation(libs.fabric.api)
+
+    // Gson serializer for FabricAudiences (adventure-api itself comes with :core)
+    implementation(libs.adventureTextSerializerGson) {
+        exclude("net.kyori", "adventure-api")
+        exclude("com.google.code.gson", "gson")
+    }
 }
 
 // https://github.com/BlueMap-Minecraft/BlueMap/blob/master/implementations/fabric/build.gradle.kts#L95-L109
@@ -74,6 +80,10 @@ tasks {
 
         dependencies {
             include(project(":core"))
+            include(dependency("net.kyori:adventure-text-serializer-gson"))
+            include(dependency("net.kyori:adventure-text-serializer-json"))
+            include(dependency("net.kyori:adventure-text-serializer-commons"))
+            include(dependency("net.kyori:option"))
         }
 
         // this is janky, but it works
