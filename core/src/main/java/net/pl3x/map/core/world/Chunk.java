@@ -113,6 +113,16 @@ public abstract class Chunk {
 
     public abstract Biome getBiome(int x, int y, int z);
 
+    /**
+     * Whether this chunk stores one biome per block (26.4 and newer).
+     * These biomes are already zoomed, so {@link BiomeManager} must not zoom them again.
+     *
+     * @return true if biomes are stored per block
+     */
+    public boolean hasBlockBiomes() {
+        return false;
+    }
+
     public Chunk populate() {
         if (this.populated) {
             return this;

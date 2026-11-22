@@ -14,6 +14,11 @@ public class BiomeManager {
     }
 
     public Biome getBiome(Region region, int x, int y, int z) {
+        Chunk chunk = region.getWorld().getChunk(region, x >> 4, z >> 4);
+        if (chunk.hasBlockBiomes()) {
+            // 26.4+ saves the zoomed biome of every block
+            return chunk.getBiome(x, y, z);
+        }
         int i = x - 2;
         int j = y - 2;
         int k = z - 2;

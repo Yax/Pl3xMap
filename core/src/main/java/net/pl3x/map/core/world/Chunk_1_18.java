@@ -30,7 +30,11 @@ import net.pl3x.map.core.util.PackedIntArrayAccess;
 import org.jetbrains.annotations.Nullable;
 
 public class Chunk_1_18 extends Chunk {
+    // 26.4-snapshot-1: section biomes are stored per block (16x16x16) instead of per 4x4x4 cell
+    private static final int DATA_VERSION_BLOCK_BIOMES = 5119;
+
     private final boolean full;
+    private final boolean blockBiomes;
     private long inhabitedTime;
 
     private int worldMinY;
@@ -45,6 +49,7 @@ public class Chunk_1_18 extends Chunk {
         super(world, region, data, index);
 
         this.full = data.getStatus().endsWith("full"); // 1.20 uses minecraft namespace here
+        this.blockBiomes = getDataVersion() >= DATA_VERSION_BLOCK_BIOMES;
         if (!this.full) {
             return;
         }
@@ -74,7 +79,7 @@ public class Chunk_1_18 extends Chunk {
             // load sections into ordered array
             this.sections = new Section[1 + max - min];
             for (SectionData sectionData : sectionsData) {
-                Section section = new Section(getWorld(), sectionData);
+                Section section = new Section(getWorld(), sectionData, this.blockBiomes);
                 int y = section.getSectionY();
 
                 if (min > y) min = y;
@@ -96,6 +101,11 @@ public class Chunk_1_18 extends Chunk {
     @Override
     public boolean isFull() {
         return full;
+    }
+
+    @Override
+    public boolean hasBlockBiomes() {
+        return blockBiomes;
     }
 
     @Override
@@ -158,8 +168,9 @@ public class Chunk_1_18 extends Chunk {
         private final PackedIntArrayAccess blocks;
         private final PackedIntArrayAccess biomes;
         private final byte[] blockLight;
+        private final boolean blockBiomes;
 
-        public Section(World world, SectionData sectionData) {
+        public Section(World world, SectionData sectionData, boolean blockBiomes) {
             this.sectionY = sectionData.y;
 
             this.blockPalette = sectionData.blockStates.palette;
@@ -173,6 +184,7 @@ public class Chunk_1_18 extends Chunk {
             this.biomes = new PackedIntArrayAccess(Math.max(MCAMath.ceilLog2(this.biomePalette.length), 1), sectionData.biomes.data);
 
             this.blockLight = sectionData.blockLight;
+            this.blockBiomes = blockBiomes;
         }
 
         public BlockState getBlockState(int x, int y, int z) {
@@ -191,7 +203,9 @@ public class Chunk_1_18 extends Chunk {
             if (biomePalette.length == 1) return biomePalette[0];
             if (biomePalette.length == 0) return Biome.DEFAULT;
 
-            int id = biomes.get((y & 0b1100) << 2 | z & 0b1100 | (x & 0b1100) >> 2);
+            int id = this.blockBiomes
+                    ? biomes.get((y & 0xF) << 8 | (z & 0xF) << 4 | x & 0xF)
+                    : biomes.get((y & 0b1100) << 2 | z & 0b1100 | (x & 0b1100) >> 2);
             if (id >= biomePalette.length) {
                 return Biome.DEFAULT;
             }
