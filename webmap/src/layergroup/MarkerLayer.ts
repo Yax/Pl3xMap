@@ -115,6 +115,10 @@ export class MarkerLayer extends L.LayerGroup {
         return this._css;
     }
 
+    get markers(): Map<string, Marker> {
+        return this._markers;
+    }
+
     get timestamp(): number {
         return this._timestamp;
     }
@@ -175,6 +179,8 @@ export class MarkerLayer extends L.LayerGroup {
                 fireCustomEvent('markerremoved', marker);
             }
         });
+
+        fireCustomEvent('overlayupdated', this);
 
         this._timer = setTimeout(() => this.update(world), this._updateInterval);
     }

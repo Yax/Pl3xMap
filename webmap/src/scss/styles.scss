@@ -214,6 +214,15 @@ img.leaflet-tile {
       }
     }
 
+    &.markers {
+      & + label {
+        background-repeat: no-repeat;
+        background-size: auto 24px;
+        background-position: 8px center;
+        padding-left: 40px;
+      }
+    }
+
     &.renderer {
       & + label {
         margin: 0 4px 0 0;

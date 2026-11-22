@@ -2,6 +2,7 @@ import * as L from "leaflet";
 import {Pl3xMap} from "../Pl3xMap";
 import Pl3xMapLeafletMap from "../map/Pl3xMapLeafletMap";
 import LayersTab from "../sidebar/LayersTab";
+import MarkersTab from "../sidebar/MarkersTab";
 import PlayersTab from "../sidebar/PlayersTab";
 import WorldsTab from "../sidebar/WorldsTab";
 
@@ -44,7 +45,7 @@ export default class SidebarControl extends L.Control {
         this.addTab(new WorldsTab(pl3xmap));
         this.addTab(new LayersTab(pl3xmap));
         this.addTab(new PlayersTab(pl3xmap));
-        //this.addTab(new MarkersTab(pl3xmap));
+        this.addTab(new MarkersTab(pl3xmap));
     }
 
     onAdd(map: Pl3xMapLeafletMap): HTMLDivElement {
