@@ -25,6 +25,7 @@
 package net.pl3x.map.core.world;
 
 import de.bluecolored.bluenbt.NBTName;
+import java.util.Set;
 import net.pl3x.map.core.util.MCAMath;
 import net.pl3x.map.core.util.PackedIntArrayAccess;
 import org.jetbrains.annotations.Nullable;
@@ -32,6 +33,10 @@ import org.jetbrains.annotations.Nullable;
 public class Chunk_1_18 extends Chunk {
     // 26.4-snapshot-1: section biomes are stored per block (16x16x16) instead of per 4x4x4 cell
     private static final int DATA_VERSION_BLOCK_BIOMES = 5119;
+
+    // retrogen target statuses of chunks that were fully generated before they were upgraded
+    // (the game saves "spawn" for these; "heightmaps" only existed up to 1.19)
+    private static final Set<String> RETROGEN_FULL_STATUSES = Set.of("spawn", "heightmaps", "full");
 
     private final boolean full;
     private final boolean blockBiomes;
@@ -48,7 +53,8 @@ public class Chunk_1_18 extends Chunk {
     public Chunk_1_18(World world, Region region, Data data, int index) {
         super(world, region, data, index);
 
-        this.full = data.getStatus().endsWith("full"); // 1.20 uses minecraft namespace here
+        this.full = data.getStatus().endsWith("full") // 1.20 uses minecraft namespace here
+                || data.isFullBeforeRetrogen();
         this.blockBiomes = getDataVersion() >= DATA_VERSION_BLOCK_BIOMES;
         if (!this.full) {
             return;
@@ -248,9 +254,42 @@ public class Chunk_1_18 extends Chunk {
 
         private SectionData @Nullable [] sections = null;
 
+        // Chunks upgraded from before 1.18 keep their old blocks, but they stay at an early status
+        // until the game loads them again and generates the new layers below y 0.
+        // 1.18 to 26.3
+        @NBTName("below_zero_retrogen")
+        private @Nullable RetrogenData belowZeroRetrogen = null;
+
+        // 26.4
+        @NBTName("retrogen")
+        private @Nullable RetrogenData retrogen = null;
+
         public String getStatus() {
             return this.status != null ? this.status : this.legacyStatus;
         }
+
+        /**
+         * Whether this chunk was fully generated before it was upgraded and still waits for its retrogen.
+         * These chunks have all their old blocks, so they can be rendered.
+         *
+         * @return true if the retrogen target status is a full chunk
+         */
+        public boolean isFullBeforeRetrogen() {
+            RetrogenData data = this.retrogen != null ? this.retrogen : this.belowZeroRetrogen;
+            if (data == null || data.targetStatus == null) {
+                return false;
+            }
+            String target = data.targetStatus.startsWith("minecraft:") ? data.targetStatus.substring(10) : data.targetStatus;
+            return RETROGEN_FULL_STATUSES.contains(target);
+        }
+
+    }
+
+    @SuppressWarnings("FieldMayBeFinal")
+    public static class RetrogenData {
+
+        @NBTName("target_status")
+        private @Nullable String targetStatus = null;
 
     }
 
