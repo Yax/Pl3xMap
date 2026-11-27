@@ -1,6 +1,6 @@
 [versions]
 bukkit="26.3.build.+"
-minecraft="26.4-pre-1"
+minecraft="26.4-pre-2"
 
 # https://fabricmc.net/develop/
 fabricApi="0.167.1+26.4"
